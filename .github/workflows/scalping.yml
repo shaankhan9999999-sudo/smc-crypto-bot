@@ -1,0 +1,30 @@
+name: Scalping Bot
+
+on:
+  schedule:
+    # यह बोट हर 5 मिनट में खुद-ब-खुद एक्टिव होकर स्कैन करेगा
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  scalp-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install requests pandas numpy
+
+      - name: Run Scalping Bot Script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python scalping.py
