@@ -47,7 +47,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add btc_v5_state.json btc_v5_journal.jsonl btc_v5_calibration.json logs/btc_signals.csv
+          git add -f logs/btc_signals.csv
+
+          git add btc_v5_state.json 2>/dev/null || true
+          git add btc_v5_journal.jsonl 2>/dev/null || true
+          git add btc_v5_calibration.json 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "No bot state or CSV changes to commit."
