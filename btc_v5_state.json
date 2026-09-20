@@ -1,16 +1,16 @@
 {
-  "last_signal": null,
-  "last_signal_ts": 0,
-  "last_direction": null,
+  "last_signal": "LONG:80639.59:2026-09-20T14:00:00+00:00",
+  "last_signal_ts": 1789920000.795647,
+  "last_direction": "LONG",
   "impulse": null,
-  "last_scan_ts": 1789919975.7528608,
+  "last_scan_ts": 1789919999.580617,
   "flow_snapshot": {
-    "ts": 1789919976.101405,
-    "imb": 0.00334943727401417,
-    "delta": -0.7315336,
+    "ts": 1789920000.1491623,
+    "imb": 0.2457568986506983,
+    "delta": 0.05533790999999987,
     "large": 0.0,
-    "buy": 0.9891589,
-    "sell": 1.7206924999999997,
+    "buy": 0.38359153999999995,
+    "sell": 0.32825363000000013,
     "trade_count": 100
   }
 }
