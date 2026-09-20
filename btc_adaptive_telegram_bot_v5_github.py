@@ -9,7 +9,7 @@ PRODUCT = "BTC-USD"
 REST = "https://api.exchange.coinbase.com"
 WS_URL = "wss://ws-feed.exchange.coinbase.com"
 
-TOKEN = "8662975391:AAF0J88xU_Kf-ldWJYzGa4ZUC_FRFENYqIM"
+TOKEN = TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 CHAT_ID = "7500472109"
 
 STATE_FILE = "btc_v5_state.json"
