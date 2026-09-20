@@ -41,17 +41,17 @@ jobs:
         run: |
           python btc_adaptive_telegram_bot_v5_github.py --once
 
-      - name: Persist bot state
+      - name: Persist bot state and CSV logs
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add btc_v5_state.json btc_v5_journal.jsonl btc_v5_calibration.json logs/btc_signals.csv 2>/dev/null || true
+          git add btc_v5_state.json btc_v5_journal.jsonl btc_v5_calibration.json logs/btc_signals.csv
 
           if git diff --cached --quiet; then
-            echo "No bot state changes to commit."
+            echo "No bot state or CSV changes to commit."
           else
-            git commit -m "chore: persist BTC V5 bot state"
+            git commit -m "chore: persist BTC V5 state and logs"
             git push
           fi
