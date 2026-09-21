@@ -2,15 +2,15 @@
   "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
   "last_signal_ts": 1790022755.6522157,
   "last_direction": "LONG",
-  "last_scan_ts": 1790022753.5314908,
+  "last_scan_ts": 1790023562.9105525,
   "flow_snapshot": {
-    "imb": 0.012685643651811202,
-    "delta": 0.7317500099999998,
-    "large": 0.46509566,
-    "buy": 0.8948989099999999,
-    "sell": 0.16314889999999999,
+    "imb": 0.10367368445764774,
+    "delta": -1.5570311500000005,
+    "large": -1.09514628,
+    "buy": 0.3993298399999999,
+    "sell": 1.9563609900000003,
     "trade_count": 100,
-    "ts": 1790022754.1260428
+    "ts": 1790023563.9288561
   },
   "last_sweep": {
     "type": "NONE",
@@ -43,17 +43,17 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "CONTINUATION_READY",
-        "score": 0.8781102432804002,
-        "pullback_depth": 0.20622048656080041,
-        "breakout_level": 86895.0,
-        "impulse_range": 1003.7799999999988,
+        "state": "INVALIDATED",
+        "score": 0.5981291961905053,
+        "pullback_depth": 0.36168704962776965,
+        "breakout_level": 87397.0,
+        "impulse_range": 1425.2100000000064,
         "reasons": [
-          "breakout_hold",
+          "breakout_lost",
           "healthy_depth",
-          "reacceleration"
+          "no_reacceleration"
         ],
-        "reversal_risk": 0.0
+        "reversal_risk": 0.35
       },
       "directional_snapshot": {
         "trend": 1.0,
@@ -85,17 +85,17 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "CONTINUATION_READY",
-        "score": 0.8781102432804002,
-        "pullback_depth": 0.20622048656080041,
-        "breakout_level": 86895.0,
-        "impulse_range": 1003.7799999999988,
+        "state": "INVALIDATED",
+        "score": 0.5981291961905053,
+        "pullback_depth": 0.36168704962776965,
+        "breakout_level": 87397.0,
+        "impulse_range": 1425.2100000000064,
         "reasons": [
-          "breakout_hold",
+          "breakout_lost",
           "healthy_depth",
-          "reacceleration"
+          "no_reacceleration"
         ],
-        "reversal_risk": 0.0
+        "reversal_risk": 0.35
       },
       "directional_snapshot": {
         "trend": 1.0,
@@ -127,17 +127,17 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "CONTINUATION_READY",
-        "score": 0.8781102432804002,
-        "pullback_depth": 0.20622048656080041,
-        "breakout_level": 86895.0,
-        "impulse_range": 1003.7799999999988,
+        "state": "INVALIDATED",
+        "score": 0.5981291961905053,
+        "pullback_depth": 0.36168704962776965,
+        "breakout_level": 87397.0,
+        "impulse_range": 1425.2100000000064,
         "reasons": [
-          "breakout_hold",
+          "breakout_lost",
           "healthy_depth",
-          "reacceleration"
+          "no_reacceleration"
         ],
-        "reversal_risk": 0.0
+        "reversal_risk": 0.35
       },
       "directional_snapshot": {
         "trend": 1.0,
