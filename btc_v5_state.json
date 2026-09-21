@@ -3,14 +3,26 @@
   "last_signal_ts": 1789961703.9767857,
   "last_direction": "LONG",
   "impulse": null,
-  "last_scan_ts": 1789963651.0098066,
+  "last_scan_ts": 1789967889.846183,
   "flow_snapshot": {
-    "ts": 1789963651.6789405,
-    "imb": -0.07575313509529123,
-    "delta": 0.8720769999999999,
+    "ts": 1789967890.2797124,
+    "imb": 0.012261850137503898,
+    "delta": -0.48089122000000023,
     "large": 0.0,
-    "buy": 0.9038823899999999,
-    "sell": 0.031805389999999996,
+    "buy": 0.01126452,
+    "sell": 0.4921557400000002,
     "trade_count": 100
+  },
+  "last_sweep": {
+    "type": "NONE",
+    "level": 0.0,
+    "distance_atr": 0.0,
+    "reclaim_strength": 0.0,
+    "quality": 0.0,
+    "age": 0,
+    "direction": null,
+    "candle_ts": "2026-09-21T04:00:00+00:00",
+    "penetration": 0.0,
+    "rejection": 0.0
   }
 }
