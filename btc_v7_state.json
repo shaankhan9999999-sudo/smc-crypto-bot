@@ -1,0 +1,64 @@
+{
+  "last_signal": "LONG_2026-09-21T13:30:00+00:00",
+  "last_signal_ts": 1789998612.2507977,
+  "last_direction": "LONG",
+  "last_scan_ts": 1789998610.6273794,
+  "flow_snapshot": {
+    "imb": -0.02880616219134698,
+    "delta": 0.03589514999999998,
+    "large": 0.0,
+    "buy": 0.69995907,
+    "sell": 0.6640639200000001,
+    "trade_count": 100,
+    "ts": 1789998611.310091
+  },
+  "last_sweep": {
+    "type": "NONE",
+    "age": null,
+    "direction": null,
+    "level": 0.0,
+    "distance_atr": 0.0,
+    "reclaim_strength": 0.0,
+    "quality": 0.0
+  },
+  "continuation": null,
+  "news_events": [],
+  "active_trades": {
+    "LONG_2026-09-21T13:30:00+00:00": {
+      "signal_id": "LONG_2026-09-21T13:30:00+00:00",
+      "direction": "LONG",
+      "entry": 85057.41,
+      "stop": 84525.80118750001,
+      "target": 85907.9841,
+      "initial_target": 85907.9841,
+      "target_version": 0,
+      "status": "ACTIVE",
+      "created_at": 1789998612.2507954,
+      "last_update_at": 1789998612.2507958,
+      "last_update_price": 85057.41,
+      "telegram_message_id": 246,
+      "score": 71.275,
+      "agreement": 0.875,
+      "news_alignment": "UNAVAILABLE",
+      "continuation": {
+        "state": "NONE",
+        "score": 0.0,
+        "pullback_depth": 0.0,
+        "breakout_level": 0.0,
+        "impulse_range": 0.0,
+        "reasons": [],
+        "reversal_risk": 0.0
+      },
+      "directional_snapshot": {
+        "trend": 1.0,
+        "structure": 0.5,
+        "price": 0.5,
+        "volume": 1.0,
+        "momentum": 1.0,
+        "retest": 0.0,
+        "orderflow": 0.675,
+        "reversal": 1.0
+      }
+    }
+  }
+}
