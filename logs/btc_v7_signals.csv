@@ -37,3 +37,4 @@ timestamp,event,signal_id,direction,score,agreement,entry,sl,tp,rr,news_status,n
 2026-09-21T22:55:39.863931+00:00,WAIT,,SHORT,49.975,0.5,86400.92,86940.92575,85536.9108,1.5999999999999999,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,,,,,"score_low,agreement_low"
 2026-09-21T23:12:35.428958+00:00,WAIT,,LONG,58.025,0.5,86423.13,85882.9854375,87287.3613,1.6,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,,,,,"score_low,agreement_low"
 2026-09-21T23:27:51.255105+00:00,WAIT,,LONG,56.725,0.5,86622.17,86080.7814375,87488.3917,1.6,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,,,,,"score_low,agreement_low"
+2026-09-21T23:42:34.126254+00:00,WAIT,,LONG,52.25,0.5,86468.17,85927.7439375,87332.8517,1.6,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,,,,,"score_low,agreement_low"
