@@ -2,15 +2,15 @@
   "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
   "last_signal_ts": 1790022755.6522157,
   "last_direction": "LONG",
-  "last_scan_ts": 1790024228.9478443,
+  "last_scan_ts": 1790025168.8515086,
   "flow_snapshot": {
-    "imb": 0.06413981893018139,
-    "delta": 0.9151165600000003,
+    "imb": -0.09287052093405801,
+    "delta": 0.27579105000000004,
     "large": 0.0,
-    "buy": 1.12553773,
-    "sell": 0.21042117000000002,
+    "buy": 0.7331332600000002,
+    "sell": 0.45734220999999986,
     "trade_count": 100,
-    "ts": 1790024235.4771893
+    "ts": 1790025169.7267144
   },
   "last_sweep": {
     "type": "NONE",
@@ -44,14 +44,14 @@
       "setup_type": "TREND CONTINUATION",
       "continuation": {
         "state": "INVALIDATED",
-        "score": 0.6283435248138848,
-        "pullback_depth": 0.36168704962776965,
+        "score": 0.6427456539527842,
+        "pullback_depth": 0.39997200159149243,
         "breakout_level": 87397.0,
-        "impulse_range": 1425.2100000000064,
+        "impulse_range": 1357.2200000000012,
         "reasons": [
           "breakout_lost",
           "healthy_depth",
-          "no_reacceleration"
+          "reacceleration"
         ],
         "reversal_risk": 0.35
       },
@@ -86,14 +86,14 @@
       "setup_type": "TREND CONTINUATION",
       "continuation": {
         "state": "INVALIDATED",
-        "score": 0.6283435248138848,
-        "pullback_depth": 0.36168704962776965,
+        "score": 0.6427456539527842,
+        "pullback_depth": 0.39997200159149243,
         "breakout_level": 87397.0,
-        "impulse_range": 1425.2100000000064,
+        "impulse_range": 1357.2200000000012,
         "reasons": [
           "breakout_lost",
           "healthy_depth",
-          "no_reacceleration"
+          "reacceleration"
         ],
         "reversal_risk": 0.35
       },
@@ -105,48 +105,6 @@
         "momentum": 0.5,
         "retest": 0.7801223282355776,
         "orderflow": 0.425,
-        "reversal": 0.0
-      }
-    },
-    "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00": {
-      "signal_id": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
-      "direction": "LONG",
-      "entry_candle_ts": "2026-09-21T20:15:00+00:00",
-      "entry": 87265.5,
-      "stop": 86720.090625,
-      "target": 88138.155,
-      "initial_target": 88138.155,
-      "target_version": 0,
-      "status": "ACTIVE",
-      "created_at": 1790022755.6522114,
-      "last_update_at": 1790022755.652212,
-      "last_update_price": 87265.5,
-      "telegram_message_id": 277,
-      "score": 77.7873229193648,
-      "agreement": 0.875,
-      "news_alignment": "UNAVAILABLE",
-      "setup_type": "TREND CONTINUATION",
-      "continuation": {
-        "state": "INVALIDATED",
-        "score": 0.6283435248138848,
-        "pullback_depth": 0.36168704962776965,
-        "breakout_level": 87397.0,
-        "impulse_range": 1425.2100000000064,
-        "reasons": [
-          "breakout_lost",
-          "healthy_depth",
-          "no_reacceleration"
-        ],
-        "reversal_risk": 0.35
-      },
-      "directional_snapshot": {
-        "trend": 1.0,
-        "structure": 1.0,
-        "price": 0.5,
-        "volume": 1.0,
-        "momentum": 0.5,
-        "retest": 0.8781102432804002,
-        "orderflow": 0.75,
         "reversal": 0.0
       }
     }

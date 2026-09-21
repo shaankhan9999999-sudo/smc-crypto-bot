@@ -1,5 +1,5 @@
 {
-  "samples": 1,
+  "samples": 2,
   "outcomes": [
     {
       "ts": "2026-09-21T14:53:48.541348+00:00",
@@ -10,6 +10,16 @@
       "agreement": 0.875,
       "news_alignment": "UNAVAILABLE",
       "continuation": "NONE"
+    },
+    {
+      "ts": "2026-09-21T21:12:50.913187+00:00",
+      "signal_id": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
+      "status": "SL_HIT",
+      "r_multiple": -1.1213961989560448,
+      "score": 77.7873229193648,
+      "agreement": 0.875,
+      "news_alignment": "UNAVAILABLE",
+      "continuation": "INVALIDATED"
     }
   ]
 }
