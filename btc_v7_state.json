@@ -1,16 +1,16 @@
 {
-  "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T21:15:00+00:00",
-  "last_signal_ts": 1790026287.1346984,
-  "last_direction": "LONG",
-  "last_scan_ts": 1790029830.1694736,
+  "last_signal": "SHORT_TREND_CONTINUATION_2026-09-21T22:15:00+00:00",
+  "last_signal_ts": 1790030662.704102,
+  "last_direction": "SHORT",
+  "last_scan_ts": 1790030660.2731254,
   "flow_snapshot": {
-    "imb": -0.1922658941815189,
-    "delta": 0.3522232900000001,
+    "imb": -0.07323104063871133,
+    "delta": -0.0830034,
     "large": 0.0,
-    "buy": 0.49186304000000003,
-    "sell": 0.13963975,
+    "buy": 0.13658028,
+    "sell": 0.21958368,
     "trade_count": 100,
-    "ts": 1790029830.9532955
+    "ts": 1790030661.4839485
   },
   "last_sweep": {
     "type": "NONE",
@@ -137,7 +137,45 @@
         "orderflow": 0.5,
         "reversal": 1.0
       }
+    },
+    "SHORT_TREND_CONTINUATION_2026-09-21T22:15:00+00:00": {
+      "signal_id": "SHORT_TREND_CONTINUATION_2026-09-21T22:15:00+00:00",
+      "direction": "SHORT",
+      "entry_candle_ts": "2026-09-21T22:15:00+00:00",
+      "entry": 86395.77,
+      "stop": 86935.7435625,
+      "target": 85531.8123,
+      "initial_target": 85531.8123,
+      "target_version": 0,
+      "status": "ACTIVE",
+      "created_at": 1790030662.7040977,
+      "last_update_at": 1790030662.7040982,
+      "last_update_price": 86395.77,
+      "telegram_message_id": 288,
+      "score": 63.775,
+      "agreement": 0.625,
+      "news_alignment": "UNAVAILABLE",
+      "setup_type": "TREND CONTINUATION",
+      "continuation": {
+        "state": "NONE",
+        "score": 0.0,
+        "pullback_depth": 0.0,
+        "breakout_level": 0.0,
+        "impulse_range": 0.0,
+        "reasons": [],
+        "reversal_risk": 0.0
+      },
+      "directional_snapshot": {
+        "trend": 0.16666666666666666,
+        "structure": 1.0,
+        "price": 1.0,
+        "volume": 0.25,
+        "momentum": 0.5,
+        "retest": 0.0,
+        "orderflow": 0.675,
+        "reversal": 1.0
+      }
     }
   },
-  "last_entry_candle_ts": "2026-09-21T21:15:00+00:00"
+  "last_entry_candle_ts": "2026-09-21T22:15:00+00:00"
 }
