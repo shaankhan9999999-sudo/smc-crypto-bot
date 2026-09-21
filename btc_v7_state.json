@@ -1,16 +1,16 @@
 {
-  "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T19:00:00+00:00",
-  "last_signal_ts": 1790018564.8251197,
+  "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T19:30:00+00:00",
+  "last_signal_ts": 1790020052.809904,
   "last_direction": "LONG",
-  "last_scan_ts": 1790019349.3414958,
+  "last_scan_ts": 1790020050.745737,
   "flow_snapshot": {
-    "imb": 0.045262305670770976,
-    "delta": -4.671207359999999,
-    "large": -4.750486029999999,
-    "buy": 0.9168310599999998,
-    "sell": 5.588038419999999,
+    "imb": -0.12870465957403984,
+    "delta": 1.0154028700000004,
+    "large": 0.0,
+    "buy": 1.2224434600000005,
+    "sell": 0.2070405899999999,
     "trade_count": 100,
-    "ts": 1790019349.9072917
+    "ts": 1790020051.634432
   },
   "last_sweep": {
     "type": "NONE",
@@ -43,17 +43,17 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "IMPULSE",
-        "score": 0.648693650448617,
-        "pullback_depth": 0.12362798902392683,
-        "breakout_level": 86354.94,
-        "impulse_range": 408.1600000000035,
+        "state": "CONTINUATION_READY",
+        "score": 0.7801223282355776,
+        "pullback_depth": 0.2167941007585624,
+        "breakout_level": 86461.48,
+        "impulse_range": 661.7799999999988,
         "reasons": [
           "breakout_hold",
-          "depth_outside_range",
+          "healthy_depth",
           "reacceleration"
         ],
-        "reversal_risk": 0.25
+        "reversal_risk": 0.0
       },
       "directional_snapshot": {
         "trend": 1.0,
@@ -65,7 +65,49 @@
         "orderflow": 0.5,
         "reversal": 0.0
       }
+    },
+    "LONG_TREND_CONTINUATION_2026-09-21T19:30:00+00:00": {
+      "signal_id": "LONG_TREND_CONTINUATION_2026-09-21T19:30:00+00:00",
+      "direction": "LONG",
+      "entry_candle_ts": "2026-09-21T19:30:00+00:00",
+      "entry": 86573.81,
+      "stop": 86032.7236875,
+      "target": 87439.5481,
+      "initial_target": 87439.5481,
+      "target_version": 0,
+      "status": "ACTIVE",
+      "created_at": 1790020052.8098986,
+      "last_update_at": 1790020052.809899,
+      "last_update_price": 86573.81,
+      "telegram_message_id": 272,
+      "score": 62.38646793882693,
+      "agreement": 0.75,
+      "news_alignment": "UNAVAILABLE",
+      "setup_type": "TREND CONTINUATION",
+      "continuation": {
+        "state": "CONTINUATION_READY",
+        "score": 0.7801223282355776,
+        "pullback_depth": 0.2167941007585624,
+        "breakout_level": 86461.48,
+        "impulse_range": 661.7799999999988,
+        "reasons": [
+          "breakout_hold",
+          "healthy_depth",
+          "reacceleration"
+        ],
+        "reversal_risk": 0.0
+      },
+      "directional_snapshot": {
+        "trend": 1.0,
+        "structure": 0.5,
+        "price": 0.5,
+        "volume": 1.0,
+        "momentum": 0.5,
+        "retest": 0.7801223282355776,
+        "orderflow": 0.425,
+        "reversal": 0.0
+      }
     }
   },
-  "last_entry_candle_ts": "2026-09-21T19:00:00+00:00"
+  "last_entry_candle_ts": "2026-09-21T19:30:00+00:00"
 }
