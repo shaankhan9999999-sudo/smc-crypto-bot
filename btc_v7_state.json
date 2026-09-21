@@ -2,15 +2,15 @@
   "last_signal": "SHORT_TREND_CONTINUATION_2026-09-21T22:15:00+00:00",
   "last_signal_ts": 1790030662.704102,
   "last_direction": "SHORT",
-  "last_scan_ts": 1790030660.2731254,
+  "last_scan_ts": 1790031337.538623,
   "flow_snapshot": {
-    "imb": -0.07323104063871133,
-    "delta": -0.0830034,
+    "imb": -0.1698886484871501,
+    "delta": 0.12620671,
     "large": 0.0,
-    "buy": 0.13658028,
-    "sell": 0.21958368,
+    "buy": 0.14460608000000005,
+    "sell": 0.018399369999999998,
     "trade_count": 100,
-    "ts": 1790030661.4839485
+    "ts": 1790031338.7575243
   },
   "last_sweep": {
     "type": "NONE",
