@@ -1,16 +1,16 @@
 {
-  "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T19:30:00+00:00",
-  "last_signal_ts": 1790020052.809904,
+  "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
+  "last_signal_ts": 1790022755.6522157,
   "last_direction": "LONG",
-  "last_scan_ts": 1790021902.0658586,
+  "last_scan_ts": 1790022753.5314908,
   "flow_snapshot": {
-    "imb": 0.014288908387901754,
-    "delta": 0.05354076000000002,
-    "large": 0.0,
-    "buy": 0.41815163999999994,
-    "sell": 0.36461087999999997,
+    "imb": 0.012685643651811202,
+    "delta": 0.7317500099999998,
+    "large": 0.46509566,
+    "buy": 0.8948989099999999,
+    "sell": 0.16314889999999999,
     "trade_count": 100,
-    "ts": 1790021902.7486897
+    "ts": 1790022754.1260428
   },
   "last_sweep": {
     "type": "NONE",
@@ -30,30 +30,30 @@
       "entry_candle_ts": "2026-09-21T19:00:00+00:00",
       "entry": 86051.82,
       "stop": 85513.996125,
-      "target": 86912.33820000001,
+      "target": 87543.52995000001,
       "initial_target": 86912.33820000001,
-      "target_version": 0,
-      "status": "ACTIVE",
+      "target_version": 1,
+      "status": "TARGET_EXTENDED",
       "created_at": 1790018564.825115,
-      "last_update_at": 1790018564.8251154,
-      "last_update_price": 86051.82,
+      "last_update_at": 1790022754.501022,
+      "last_update_price": 87107.99,
       "telegram_message_id": 269,
       "score": 69.0,
       "agreement": 0.625,
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "INVALIDATED",
-        "score": 0.7322256459417522,
-        "pullback_depth": 0.36945129188350445,
+        "state": "CONTINUATION_READY",
+        "score": 0.8781102432804002,
+        "pullback_depth": 0.20622048656080041,
         "breakout_level": 86895.0,
-        "impulse_range": 1095.300000000003,
+        "impulse_range": 1003.7799999999988,
         "reasons": [
-          "breakout_lost",
+          "breakout_hold",
           "healthy_depth",
           "reacceleration"
         ],
-        "reversal_risk": 0.35
+        "reversal_risk": 0.0
       },
       "directional_snapshot": {
         "trend": 1.0,
@@ -85,17 +85,17 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "INVALIDATED",
-        "score": 0.7322256459417522,
-        "pullback_depth": 0.36945129188350445,
+        "state": "CONTINUATION_READY",
+        "score": 0.8781102432804002,
+        "pullback_depth": 0.20622048656080041,
         "breakout_level": 86895.0,
-        "impulse_range": 1095.300000000003,
+        "impulse_range": 1003.7799999999988,
         "reasons": [
-          "breakout_lost",
+          "breakout_hold",
           "healthy_depth",
           "reacceleration"
         ],
-        "reversal_risk": 0.35
+        "reversal_risk": 0.0
       },
       "directional_snapshot": {
         "trend": 1.0,
@@ -107,7 +107,49 @@
         "orderflow": 0.425,
         "reversal": 0.0
       }
+    },
+    "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00": {
+      "signal_id": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
+      "direction": "LONG",
+      "entry_candle_ts": "2026-09-21T20:15:00+00:00",
+      "entry": 87265.5,
+      "stop": 86720.090625,
+      "target": 88138.155,
+      "initial_target": 88138.155,
+      "target_version": 0,
+      "status": "ACTIVE",
+      "created_at": 1790022755.6522114,
+      "last_update_at": 1790022755.652212,
+      "last_update_price": 87265.5,
+      "telegram_message_id": 277,
+      "score": 77.7873229193648,
+      "agreement": 0.875,
+      "news_alignment": "UNAVAILABLE",
+      "setup_type": "TREND CONTINUATION",
+      "continuation": {
+        "state": "CONTINUATION_READY",
+        "score": 0.8781102432804002,
+        "pullback_depth": 0.20622048656080041,
+        "breakout_level": 86895.0,
+        "impulse_range": 1003.7799999999988,
+        "reasons": [
+          "breakout_hold",
+          "healthy_depth",
+          "reacceleration"
+        ],
+        "reversal_risk": 0.0
+      },
+      "directional_snapshot": {
+        "trend": 1.0,
+        "structure": 1.0,
+        "price": 0.5,
+        "volume": 1.0,
+        "momentum": 0.5,
+        "retest": 0.8781102432804002,
+        "orderflow": 0.75,
+        "reversal": 0.0
+      }
     }
   },
-  "last_entry_candle_ts": "2026-09-21T19:30:00+00:00"
+  "last_entry_candle_ts": "2026-09-21T20:15:00+00:00"
 }
