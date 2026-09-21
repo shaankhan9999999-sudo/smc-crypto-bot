@@ -1,3 +1,4 @@
 timestamp,event,signal_id,direction,score,agreement,entry,sl,tp,rr,news_status,news_direction,news_confirmation,news_impact,news_confidence,news_relevance,news_event_count,continuation_state,continuation_score,pullback_depth,breakout_level,reversal_risk,lifecycle,target_version,previous_target,new_target,reason
 2026-09-21T13:50:11.664409+00:00,SIGNAL,LONG_2026-09-21T13:30:00+00:00,LONG,71.275,0.875,85057.41,84525.80118750001,85907.9841,1.6,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,NEW,,,,SIGNAL
 2026-09-21T14:03:02.577159+00:00,WAIT,,LONG,50.75,0.625,85443.42,84909.398625,86297.8542,1.5999999999999999,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,,,,,"score_low,sweep_not_confirmed"
+2026-09-21T14:22:41.425555+00:00,WAIT,,LONG,59.975,0.75,85296.47,84763.3670625,86149.4347,1.5999999999999999,unavailable,NEUTRAL,0.0,,,,0,NONE,0.0,0.0,0.0,0.0,,,,,"score_low,sweep_not_confirmed"

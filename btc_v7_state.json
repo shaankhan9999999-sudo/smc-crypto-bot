@@ -2,22 +2,22 @@
   "last_signal": "LONG_2026-09-21T13:30:00+00:00",
   "last_signal_ts": 1789998612.2507977,
   "last_direction": "LONG",
-  "last_scan_ts": 1789999380.7972496,
+  "last_scan_ts": 1790000559.4877775,
   "flow_snapshot": {
-    "imb": -0.024738468063625497,
-    "delta": -3.12172064,
-    "large": -1.91737461,
-    "buy": 0.08499755,
-    "sell": 3.20671819,
+    "imb": 0.11674442485668832,
+    "delta": -0.10073855000000001,
+    "large": 0.0,
+    "buy": 0.48140349000000004,
+    "sell": 0.58214204,
     "trade_count": 100,
-    "ts": 1789999381.519701
+    "ts": 1790000560.2579975
   },
   "last_sweep": {
     "type": "BUY_SIDE_SWEEP",
     "level": 85457.35,
     "distance_atr": 0.45632685053641103,
-    "reclaim_strength": 0.033918454537015114,
-    "quality": 0.45462403267209434,
+    "reclaim_strength": 0.01293767994799629,
+    "quality": 0.44203556791868304,
     "age": 0,
     "direction": "SHORT",
     "candle_ts": "2026-09-21T13:00:00+00:00"
