@@ -2,15 +2,15 @@
   "last_signal": "LONG_TREND_CONTINUATION_2026-09-21T20:15:00+00:00",
   "last_signal_ts": 1790022755.6522157,
   "last_direction": "LONG",
-  "last_scan_ts": 1790025168.8515086,
+  "last_scan_ts": 1790025358.186495,
   "flow_snapshot": {
-    "imb": -0.09287052093405801,
-    "delta": 0.27579105000000004,
-    "large": 0.0,
-    "buy": 0.7331332600000002,
-    "sell": 0.45734220999999986,
+    "imb": 0.09866458722521956,
+    "delta": 1.7648820500000002,
+    "large": 0.8461633,
+    "buy": 2.00168284,
+    "sell": 0.23680079000000004,
     "trade_count": 100,
-    "ts": 1790025169.7267144
+    "ts": 1790025358.5235279
   },
   "last_sweep": {
     "type": "NONE",
@@ -43,17 +43,13 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "INVALIDATED",
-        "score": 0.6427456539527842,
-        "pullback_depth": 0.39997200159149243,
-        "breakout_level": 87397.0,
-        "impulse_range": 1357.2200000000012,
-        "reasons": [
-          "breakout_lost",
-          "healthy_depth",
-          "reacceleration"
-        ],
-        "reversal_risk": 0.35
+        "state": "NONE",
+        "score": 0.0,
+        "pullback_depth": 0.0,
+        "breakout_level": 0.0,
+        "impulse_range": 0.0,
+        "reasons": [],
+        "reversal_risk": 0.0
       },
       "directional_snapshot": {
         "trend": 1.0,
@@ -85,17 +81,13 @@
       "news_alignment": "UNAVAILABLE",
       "setup_type": "TREND CONTINUATION",
       "continuation": {
-        "state": "INVALIDATED",
-        "score": 0.6427456539527842,
-        "pullback_depth": 0.39997200159149243,
-        "breakout_level": 87397.0,
-        "impulse_range": 1357.2200000000012,
-        "reasons": [
-          "breakout_lost",
-          "healthy_depth",
-          "reacceleration"
-        ],
-        "reversal_risk": 0.35
+        "state": "NONE",
+        "score": 0.0,
+        "pullback_depth": 0.0,
+        "breakout_level": 0.0,
+        "impulse_range": 0.0,
+        "reasons": [],
+        "reversal_risk": 0.0
       },
       "directional_snapshot": {
         "trend": 1.0,
