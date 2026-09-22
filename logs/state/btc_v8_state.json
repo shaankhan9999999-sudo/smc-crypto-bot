@@ -3,9 +3,9 @@
   "last_signal": null,
   "last_signal_ts": 0.0,
   "last_direction": null,
-  "last_scan_ts": 1790069534.833026,
+  "last_scan_ts": 1790069857.3571317,
   "cooldown_until": 0.0,
-  "regime": null,
+  "regime": "BULLISH_TREND",
   "regime_candidate": null,
   "regime_candidate_count": 0,
   "last_closed_trade": null
