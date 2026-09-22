@@ -1,0 +1,2 @@
+ts,scan_id,event,signal_id,direction,setup,regime,confidence,score,agreement,price,adaptive_adjustment,sweep_confirmation,news_confirmation,flow_direction,flow_transition,flow_score,action
+2026-09-22T13:59:30.778920+00:00,LONG_2026-09-22T13:59:30.606201+00:00,SIGNAL,LONG_2026-09-22T13:59:30.606201+00:00,LONG,TREND,BULLISH_TREND,0.7938073023621155,66.42549159135297,0.6379683870613706,86322.85,0.0,0.25366874300887965,0.0,LONG,NORMAL,0.6381640538125872,OPEN
