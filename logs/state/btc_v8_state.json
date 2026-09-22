@@ -3,7 +3,7 @@
   "last_signal": "LONG_2026-09-22T13:59:30.606201+00:00",
   "last_signal_ts": 1790085570.7789164,
   "last_direction": "LONG",
-  "last_scan_ts": 1790115744.4772274,
+  "last_scan_ts": 1790116503.676371,
   "cooldown_until": 1790090387.214293,
   "regime": "TRANSITION",
   "regime_candidate": null,
@@ -44,46 +44,46 @@
     "outcome": "LOSS"
   },
   "flow_state": {
-    "direction": "SHORT",
+    "direction": "LONG",
     "confirmed_direction": "SHORT",
-    "transition": "NORMAL",
-    "long_score": 0.32118675324207385,
-    "short_score": 0.4034662581577015,
-    "gap": -0.08227950491562763,
+    "transition": "TRANSITION",
+    "long_score": 0.4294645279220837,
+    "short_score": 0.3026521593329038,
+    "gap": 0.12681236858917994,
     "warning": false,
     "confirmed": false,
-    "transition_count": 0,
+    "transition_count": 1,
     "long": {
-      "score": 0.32118675324207385,
+      "score": 0.4294645279220837,
       "structure": {
         "score": 0.0,
         "bos": false,
         "choch": false,
-        "displacement": 0.1364544723618527,
-        "recent_high": 86390.16,
+        "displacement": 0.07248736646224789,
+        "recent_high": 86360.58,
         "recent_low": 86001.0
       },
-      "orderflow": 0.11242658627646335,
-      "mtf": 0.77181891270275,
-      "momentum": 0.5632976367411331,
-      "volume": 0.3806851776539954,
-      "liquidity": 0.4629233042068154
+      "orderflow": 0.8167036668158747,
+      "mtf": 0.7701111696545295,
+      "momentum": 0.5967562709998315,
+      "volume": 0.45091979354334993,
+      "liquidity": 0.49573942879745225
     },
     "short": {
-      "score": 0.4034662581577015,
+      "score": 0.3026521593329038,
       "structure": {
-        "score": 0.29218120161237493,
+        "score": 0.2852408014269974,
         "bos": false,
         "choch": false,
-        "displacement": 0.1364544723618527,
-        "recent_high": 86390.16,
+        "displacement": 0.07248736646224789,
+        "recent_high": 86360.58,
         "recent_low": 86001.0
       },
-      "orderflow": 0.8875734137235367,
-      "mtf": 0.22818108729724995,
-      "momentum": 0.4367023632588669,
-      "volume": 0.3806851776539954,
-      "liquidity": 0.4629233042068154
+      "orderflow": 0.18329633318412525,
+      "mtf": 0.22988883034547042,
+      "momentum": 0.40324372900016847,
+      "volume": 0.45091979354334993,
+      "liquidity": 0.49573942879745225
     },
     "previous_direction": "SHORT",
     "previous_regime": "BULLISH_PULLBACK"
