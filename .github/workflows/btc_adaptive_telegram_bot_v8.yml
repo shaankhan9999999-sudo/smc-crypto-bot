@@ -1,0 +1,106 @@
+name: BTC Adaptive Telegram Bot V8
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  btc-bot:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas numpy
+
+      - name: Check Python syntax
+        run: |
+          python -m py_compile btc_adaptive_telegram_bot_v8.py
+
+      - name: Run BTC Adaptive Telegram Bot V8
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
+          NEWS_ENABLED: "1"
+        run: |
+          python btc_adaptive_telegram_bot_v8.py --once
+
+      - name: Debug V8 files
+        if: always()
+        run: |
+          echo "===== CURRENT DIRECTORY ====="
+          pwd
+
+          echo "===== ROOT FILES ====="
+          ls -la
+
+          echo "===== LOGS DIRECTORY ====="
+          if [ -d logs ]; then
+            ls -la logs
+          else
+            echo "logs directory does NOT exist"
+          fi
+
+          echo "===== V8 STATE FILE ====="
+          if [ -f btc_v8_state.json ]; then
+            echo "btc_v8_state.json EXISTS"
+            ls -lh btc_v8_state.json
+          else
+            echo "btc_v8_state.json DOES NOT EXIST"
+          fi
+
+          echo "===== V8 JOURNAL FILE ====="
+          if [ -f btc_v8_journal.jsonl ]; then
+            echo "btc_v8_journal.jsonl EXISTS"
+            ls -lh btc_v8_journal.jsonl
+          else
+            echo "btc_v8_journal.jsonl DOES NOT EXIST"
+          fi
+
+          echo "===== V8 CALIBRATION FILE ====="
+          if [ -f btc_v8_calibration.json ]; then
+            echo "btc_v8_calibration.json EXISTS"
+            ls -lh btc_v8_calibration.json
+          else
+            echo "btc_v8_calibration.json DOES NOT EXIST"
+          fi
+
+          echo "===== V8 CSV FILE ====="
+          if [ -f logs/btc_v8_signals.csv ]; then
+            echo "logs/btc_v8_signals.csv EXISTS"
+            ls -lh logs/btc_v8_signals.csv
+          else
+            echo "logs/btc_v8_signals.csv DOES NOT EXIST"
+          fi
+
+      - name: Save V8 bot state
+        if: always()
+        run: |
+          git config user.name "BTC Adaptive Bot"
+          git config user.email "actions@github.com"
+
+          git add btc_v8_state.json 2>/dev/null || true
+          git add btc_v8_journal.jsonl 2>/dev/null || true
+          git add btc_v8_calibration.json 2>/dev/null || true
+          git add logs/btc_v8_signals.csv 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "No state changes to commit."
+          else
+            git commit -m "Update BTC V8 bot state"
+            git push
+          fi
