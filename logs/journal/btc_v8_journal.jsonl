@@ -26,3 +26,6 @@
 {"ts": "2026-09-22T10:56:20.699492+00:00", "event": "SCAN_START", "scan_id": "20260922T105620.699448Z"}
 {"ts": "2026-09-22T10:56:21.447977+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T105620.699448Z", "regime": "BULLISH_TREND", "confidence": 0.737504637093171}
 {"ts": "2026-09-22T10:56:21.448151+00:00", "event": "SCAN_DONE", "scan_id": "20260922T105620.699448Z", "status": "WAIT", "reason": "no_valid_signal"}
+{"ts": "2026-09-22T11:11:52.142852+00:00", "event": "SCAN_START", "scan_id": "20260922T111152.142800Z"}
+{"ts": "2026-09-22T11:11:52.926504+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T111152.142800Z", "regime": "BULLISH_TREND", "confidence": 0.6476051537422729}
+{"ts": "2026-09-22T11:11:52.926724+00:00", "event": "SCAN_DONE", "scan_id": "20260922T111152.142800Z", "status": "WAIT", "reason": "no_valid_signal"}
