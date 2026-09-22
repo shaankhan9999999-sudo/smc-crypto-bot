@@ -2,15 +2,15 @@
   "last_signal": "SHORT_TREND_CONTINUATION_2026-09-21T22:15:00+00:00",
   "last_signal_ts": 1790030662.704102,
   "last_direction": "SHORT",
-  "last_scan_ts": 1790042326.770424,
+  "last_scan_ts": 1790043501.65121,
   "flow_snapshot": {
-    "imb": 0.15744223118322714,
-    "delta": -0.20974193000000002,
-    "large": 0.0,
-    "buy": 0.11122668999999999,
-    "sell": 0.32096861999999987,
+    "imb": 0.0033295886159440784,
+    "delta": -1.5079472899999995,
+    "large": -0.35334752,
+    "buy": 0.3383966899999999,
+    "sell": 1.8463439799999999,
     "trade_count": 100,
-    "ts": 1790042327.366547
+    "ts": 1790043502.1131089
   },
   "last_sweep": {
     "type": "NONE",
@@ -82,10 +82,10 @@
       "setup_type": "TREND CONTINUATION",
       "continuation": {
         "state": "INVALIDATED",
-        "score": 0.6786522149547065,
-        "pullback_depth": 0.3802984129496932,
+        "score": 0.6580865277974768,
+        "pullback_depth": 0.2860167653031157,
         "breakout_level": 85347.61,
-        "impulse_range": 1263.3500000000058,
+        "impulse_range": 1152.3800000000047,
         "reasons": [
           "breakout_lost",
           "healthy_depth",
