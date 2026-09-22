@@ -1,5 +1,14 @@
 {
   "version": 1,
-  "buckets": {},
-  "updated_at": "2026-09-22T14:18:06.274374+00:00"
+  "buckets": {
+    "LONG|TREND|BULLISH_TREND": {
+      "samples": 1,
+      "wins": 0,
+      "losses": 1,
+      "sum_r": -2.1559653610861553,
+      "weighted_r": -2.154791955149219,
+      "weight": 0.999455739893546
+    }
+  },
+  "updated_at": "2026-09-22T14:34:47.878599+00:00"
 }

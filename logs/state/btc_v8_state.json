@@ -1,6 +1,15 @@
 {
-  "active_trade": {
-    "status": "OPEN",
+  "active_trade": null,
+  "last_signal": "LONG_2026-09-22T13:59:30.606201+00:00",
+  "last_signal_ts": 1790085570.7789164,
+  "last_direction": "LONG",
+  "last_scan_ts": 1790087681.7019713,
+  "cooldown_until": 1790090387.214293,
+  "regime": "TRANSITION",
+  "regime_candidate": null,
+  "regime_candidate_count": 0,
+  "last_closed_trade": {
+    "status": "CLOSED",
     "signal_id": "LONG_2026-09-22T13:59:30.606201+00:00",
     "opened_at": "2026-09-22T13:59:30.778902+00:00",
     "direction": "LONG",
@@ -27,60 +36,56 @@
       "timestamp": 1790085570.5549312
     },
     "extensions": 0,
-    "last_extension_ts": 0.0
+    "last_extension_ts": 0.0,
+    "closed_at": "2026-09-22T14:34:47.214258+00:00",
+    "exit": 85777.09,
+    "close_reason": "SL_HIT",
+    "pnl_r": -2.1559653610861553,
+    "outcome": "LOSS"
   },
-  "last_signal": "LONG_2026-09-22T13:59:30.606201+00:00",
-  "last_signal_ts": 1790085570.7789164,
-  "last_direction": "LONG",
-  "last_scan_ts": 1790086685.1197388,
-  "cooldown_until": 1790088270.7789176,
-  "regime": "BULLISH_TREND",
-  "regime_candidate": null,
-  "regime_candidate_count": 0,
-  "last_closed_trade": null,
   "flow_state": {
-    "direction": "LONG",
-    "confirmed_direction": "LONG",
+    "direction": "SHORT",
+    "confirmed_direction": "SHORT",
     "transition": "TRANSITION",
-    "long_score": 0.5706672834390136,
-    "short_score": 0.4598928817758394,
-    "gap": 0.1107744016631742,
+    "long_score": 0.25131033529397373,
+    "short_score": 0.5164982414343016,
+    "gap": -0.26518790614032783,
     "warning": false,
     "confirmed": false,
-    "transition_count": 1,
+    "transition_count": 2,
     "long": {
-      "score": 0.5706672834390136,
+      "score": 0.25131033529397373,
       "structure": {
-        "score": 0.6088968024006006,
-        "bos": true,
+        "score": 0.0,
+        "bos": false,
         "choch": false,
-        "displacement": 1.0,
+        "displacement": 0.43377016699648197,
         "recent_high": 86465.4,
         "recent_low": 85560.12
       },
-      "orderflow": 0.34993899108358734,
-      "mtf": 0.8301573851473725,
-      "momentum": 0.4194130741948794,
-      "volume": 0.6606804872582325,
-      "liquidity": 0.21787014661275989
+      "orderflow": 0.06804137019893186,
+      "mtf": 0.7455590521911605,
+      "momentum": 0.16959737655951002,
+      "volume": 0.6689367921019098,
+      "liquidity": 0.0
     },
     "short": {
-      "score": 0.4598928817758394,
+      "score": 0.5164982414343016,
       "structure": {
-        "score": 0.25,
+        "score": 0.44694660378582013,
         "bos": false,
-        "choch": true,
-        "displacement": 1.0,
+        "choch": false,
+        "displacement": 0.43377016699648197,
         "recent_high": 86465.4,
         "recent_low": 85560.12
       },
-      "orderflow": 0.6500610089164127,
-      "mtf": 0.16984261485262755,
-      "momentum": 0.5805869258051206,
-      "volume": 0.6606804872582325,
-      "liquidity": 0.21787014661275989
+      "orderflow": 0.9319586298010681,
+      "mtf": 0.25444094780883963,
+      "momentum": 0.83040262344049,
+      "volume": 0.6689367921019098,
+      "liquidity": 0.0
     },
     "previous_direction": "LONG",
-    "previous_regime": "BULLISH_TREND"
+    "previous_regime": "BULLISH_PULLBACK"
   }
 }
