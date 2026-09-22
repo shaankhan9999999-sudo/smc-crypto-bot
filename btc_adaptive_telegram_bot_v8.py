@@ -2530,6 +2530,7 @@ def fetch_news():
                 item.get("published_at") or
                 item.get("published") or
                 item.get("created_at")
+            )
             # ============================================================
 # SIGNAL SCORING / AGREEMENT
 # ============================================================
