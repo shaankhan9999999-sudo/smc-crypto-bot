@@ -23,3 +23,6 @@
 {"ts": "2026-09-22T10:45:16.063970+00:00", "event": "SCAN_START", "scan_id": "20260922T104516.063917Z"}
 {"ts": "2026-09-22T10:45:16.690357+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T104516.063917Z", "regime": "BULLISH_TREND", "confidence": 0.5824343241934793}
 {"ts": "2026-09-22T10:45:16.690584+00:00", "event": "SCAN_DONE", "scan_id": "20260922T104516.063917Z", "status": "WAIT", "reason": "no_valid_signal"}
+{"ts": "2026-09-22T10:56:20.699492+00:00", "event": "SCAN_START", "scan_id": "20260922T105620.699448Z"}
+{"ts": "2026-09-22T10:56:21.447977+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T105620.699448Z", "regime": "BULLISH_TREND", "confidence": 0.737504637093171}
+{"ts": "2026-09-22T10:56:21.448151+00:00", "event": "SCAN_DONE", "scan_id": "20260922T105620.699448Z", "status": "WAIT", "reason": "no_valid_signal"}
