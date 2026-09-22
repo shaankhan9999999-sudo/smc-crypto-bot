@@ -1,5 +1,5 @@
 {
-  "samples": 2,
+  "samples": 4,
   "outcomes": [
     {
       "ts": "2026-09-21T14:53:48.541348+00:00",
@@ -20,6 +20,26 @@
       "agreement": 0.875,
       "news_alignment": "UNAVAILABLE",
       "continuation": "INVALIDATED"
+    },
+    {
+      "ts": "2026-09-22T01:05:31.506923+00:00",
+      "signal_id": "LONG_TREND_CONTINUATION_2026-09-21T19:30:00+00:00",
+      "status": "SL_HIT",
+      "r_multiple": -1.6149179526695057,
+      "score": 62.38646793882693,
+      "agreement": 0.75,
+      "news_alignment": "UNAVAILABLE",
+      "continuation": "NONE"
+    },
+    {
+      "ts": "2026-09-22T01:05:32.023721+00:00",
+      "signal_id": "LONG_TREND_CONTINUATION_2026-09-21T21:15:00+00:00",
+      "status": "SL_HIT",
+      "r_multiple": -1.6974393821951514,
+      "score": 69.0,
+      "agreement": 0.75,
+      "news_alignment": "UNAVAILABLE",
+      "continuation": "NONE"
     }
   ]
 }
