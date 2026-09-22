@@ -5,3 +5,5 @@ ts,scan_id,event,reason,signal_id,direction,setup,regime,confidence,score,agreem
 2026-09-22T09:32:15.565956+00:00,ERROR_20260922T093215.565960Z,SCAN_ERROR,,,,,,,,,,,,,,ERROR,"ValueError('Invalid frequency: 2H. Failed to parse with error message: ValueError(""Invalid frequency: H. Failed to parse with error message: KeyError(\'H\'). Did you mean h?"")')"
 2026-09-22T09:37:37.357147+00:00,20260922T093737.357133Z,SCAN_START,,,,,,,,,,,,,,SCAN,
 2026-09-22T09:37:37.706081+00:00,20260922T093737.357133Z,WAIT,no_valid_signal,,,,BULLISH_TREND,0.7892524680455484,,,,,,,,,
+2026-09-22T09:46:08.653630+00:00,20260922T094608.653611Z,SCAN_START,,,,,,,,,,,,,,SCAN,
+2026-09-22T09:46:09.130880+00:00,20260922T094608.653611Z,WAIT,no_valid_signal,,,,BULLISH_TREND,0.8143959899972428,,,,,,,,,
