@@ -8,3 +8,6 @@
 {"ts": "2026-09-22T09:46:08.653678+00:00", "event": "SCAN_START", "scan_id": "20260922T094608.653611Z"}
 {"ts": "2026-09-22T09:46:09.130786+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T094608.653611Z", "regime": "BULLISH_TREND", "confidence": 0.8143959899972428}
 {"ts": "2026-09-22T09:46:09.130990+00:00", "event": "SCAN_DONE", "scan_id": "20260922T094608.653611Z", "status": "WAIT", "reason": "no_valid_signal"}
+{"ts": "2026-09-22T09:56:30.205075+00:00", "event": "SCAN_START", "scan_id": "20260922T095630.204987Z"}
+{"ts": "2026-09-22T09:56:30.565695+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T095630.204987Z", "regime": "BULLISH_TREND", "confidence": 0.8594960773461868}
+{"ts": "2026-09-22T09:56:30.565905+00:00", "event": "SCAN_DONE", "scan_id": "20260922T095630.204987Z", "status": "WAIT", "reason": "no_valid_signal"}
