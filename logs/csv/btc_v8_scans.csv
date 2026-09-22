@@ -1,0 +1,3 @@
+ts,scan_id,event,reason,signal_id,direction,setup,regime,confidence,score,agreement,price,adaptive_adjustment,sweep_confirmation,news_confirmation,active_trade,action,error
+2026-09-22T09:28:55.229792+00:00,20260922T092855.229767Z,SCAN_START,,,,,,,,,,,,,,SCAN,
+2026-09-22T09:28:55.713651+00:00,ERROR_20260922T092855.713656Z,SCAN_ERROR,,,,,,,,,,,,,,ERROR,"ValueError('Invalid frequency: 2H. Failed to parse with error message: ValueError(""Invalid frequency: H. Failed to parse with error message: KeyError(\'H\'). Did you mean h?"")')"

@@ -1,0 +1,12 @@
+{
+  "active_trade": null,
+  "last_signal": null,
+  "last_signal_ts": 0.0,
+  "last_direction": null,
+  "last_scan_ts": 1790069335.2297637,
+  "cooldown_until": 0.0,
+  "regime": null,
+  "regime_candidate": null,
+  "regime_candidate_count": 0,
+  "last_closed_trade": null
+}
