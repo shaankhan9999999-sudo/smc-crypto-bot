@@ -29,3 +29,8 @@
 {"ts": "2026-09-22T11:11:52.142852+00:00", "event": "SCAN_START", "scan_id": "20260922T111152.142800Z"}
 {"ts": "2026-09-22T11:11:52.926504+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T111152.142800Z", "regime": "BULLISH_TREND", "confidence": 0.6476051537422729}
 {"ts": "2026-09-22T11:11:52.926724+00:00", "event": "SCAN_DONE", "scan_id": "20260922T111152.142800Z", "status": "WAIT", "reason": "no_valid_signal"}
+{"ts": "2026-09-22T11:56:05.586967+00:00", "event": "SCAN_START", "scan_id": "20260922T115605.586909Z"}
+{"ts": "2026-09-22T11:56:06.143534+00:00", "event": "DECISION_BLOCK", "direction": "LONG", "regime": "BULLISH_TREND", "flow_direction": "NEUTRAL", "flow_score": 0.32985400218246785, "mode": "BLOCK", "reason": "flow_not_supportive", "setup": "TREND"}
+{"ts": "2026-09-22T11:56:06.192982+00:00", "event": "DECISION_BLOCK", "direction": "SHORT", "regime": "BULLISH_TREND", "flow_direction": "NEUTRAL", "flow_score": 0.31555567239904114, "mode": "BLOCK", "reason": "opposite_regime_direction", "setup": "TREND"}
+{"ts": "2026-09-22T11:56:06.193102+00:00", "event": "WAIT", "reason": "no_valid_signal", "scan_id": "20260922T115605.586909Z", "regime": "BULLISH_TREND", "confidence": 0.6521928906036742, "flow_direction": "NEUTRAL", "flow_transition": "WEAKENING", "flow_long": 0.32985400218246785, "flow_short": 0.31555567239904114, "news_error": "missing_api_key", "news_articles": 0}
+{"ts": "2026-09-22T11:56:06.193313+00:00", "event": "SCAN_DONE", "scan_id": "20260922T115605.586909Z", "status": "WAIT", "reason": "no_valid_signal"}
