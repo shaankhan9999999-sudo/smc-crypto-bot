@@ -87,7 +87,7 @@ def aggregate_candles(df,seconds):
     d=df.copy()
     if d.empty:return d
     d["dt"]=pd.to_datetime(d.ts,unit="s",utc=True)
-    rule=f"{int(seconds//3600)}H" if seconds%3600==0 else f"{int(seconds//60)}min"
+    rule=f"{int(seconds//3600)}h" if seconds%3600==0 else f"{int(seconds//60)}min"
     out=d.set_index("dt").resample(rule,origin="epoch",label="left",closed="left").agg(open=("open","first"),high=("high","max"),low=("low","min"),close=("close","last"),volume=("volume","sum")).dropna().reset_index()
     out["ts"]=(out["dt"].astype("int64")//10**9).astype(int)
     return out[["ts","low","high","open","close","volume"]].reset_index(drop=True)
