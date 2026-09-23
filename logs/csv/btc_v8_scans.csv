@@ -138,3 +138,4 @@ ts,scan_id,event,reason,signal_id,direction,setup,regime,confidence,score,agreem
 2026-09-23T00:15:53.631208+00:00,20260923T001552.279270Z,WAIT,no_valid_signal,,,,BULLISH_TREND,0.5320357566321161,,,,,,,,,
 2026-09-23T00:34:25.657187+00:00,20260923T003425.657166Z,SCAN_START,,,,,,,,,,,,,,SCAN,
 2026-09-23T00:34:27.361190+00:00,ERROR_20260923T003427.361195Z,SCAN_ERROR,,,,,,,,,,,,,,ERROR,"TypeError(""journal() got multiple values for argument 'event'"")"
+2026-09-23T00:50:30.849801+00:00,20260923T005030.849780Z,SCAN_START,,,,,,,,,,,,,,SCAN,
