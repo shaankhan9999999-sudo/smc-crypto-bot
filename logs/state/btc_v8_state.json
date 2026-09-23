@@ -3,7 +3,7 @@
   "last_signal": "LONG_2026-09-23T05:16:41.901682+00:00",
   "last_signal_ts": 1790140602.061076,
   "last_direction": "LONG",
-  "last_scan_ts": 1790152773.7146227,
+  "last_scan_ts": 1790153595.0876582,
   "cooldown_until": 1790144198.58118,
   "regime": "TRANSITION",
   "regime_candidate": null,
@@ -49,49 +49,49 @@
     "close_notification_last_attempt": "2026-09-23T05:31:38.870401+00:00"
   },
   "flow_state": {
-    "direction": "NEUTRAL",
-    "confirmed_direction": "NEUTRAL",
-    "transition": "TRANSITION",
-    "long_score": 0.468885304816415,
-    "short_score": 0.49152354603428805,
-    "gap": -0.022638241217873056,
-    "warning": false,
+    "direction": "SHORT",
+    "confirmed_direction": "SHORT",
+    "transition": "NORMAL",
+    "long_score": 0.44623124233800304,
+    "short_score": 0.693768757661997,
+    "gap": -0.24753751532399393,
+    "warning": true,
     "confirmed": false,
-    "transition_count": 6,
+    "transition_count": 0,
     "long": {
-      "score": 0.468885304816415,
+      "score": 0.44623124233800304,
       "structure": {
         "score": 0.25,
         "bos": false,
         "choch": true,
-        "displacement": 0.5697467143069769,
-        "recent_high": 86565.36,
-        "recent_low": 85982.0
+        "displacement": 1.0,
+        "recent_high": 86462.0,
+        "recent_low": 85666.56
       },
-      "orderflow": 0.967782282006227,
-      "mtf": 0.6016158652066061,
-      "momentum": 0.4435190860860745,
-      "volume": 0.5581222325040404,
-      "liquidity": 0.04516346459787274
+      "orderflow": 0.47822207957811624,
+      "mtf": 0.5380850429274887,
+      "momentum": 0.2746765324201146,
+      "volume": 1.0,
+      "liquidity": 0.0
     },
     "short": {
-      "score": 0.49152354603428805,
+      "score": 0.693768757661997,
       "structure": {
-        "score": 0.9333159582708759,
+        "score": 1.0,
         "bos": true,
         "choch": false,
-        "displacement": 0.5697467143069769,
-        "recent_high": 86565.36,
-        "recent_low": 85982.0
+        "displacement": 1.0,
+        "recent_high": 86462.0,
+        "recent_low": 85666.56
       },
-      "orderflow": 0.0322177179937731,
-      "mtf": 0.39838413479339385,
-      "momentum": 0.5564809139139255,
-      "volume": 0.5581222325040404,
-      "liquidity": 0.04516346459787274
+      "orderflow": 0.5217779204218838,
+      "mtf": 0.46191495707251135,
+      "momentum": 0.7253234675798854,
+      "volume": 1.0,
+      "liquidity": 0.0
     },
-    "previous_direction": "SHORT",
-    "previous_regime": "RANGE"
+    "previous_direction": "NEUTRAL",
+    "previous_regime": "BEARISH_PULLBACK"
   },
   "shadow_state": {
     "levels": {
@@ -103,8 +103,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "RETEST",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420623+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.617941+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -116,8 +116,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420679+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.617991+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -125,13 +125,13 @@
         "timeframe": "1h",
         "kind": "SUPPORT",
         "level": 86001.0,
-        "state": "TEST_RETEST",
-        "direction": null,
+        "state": "BREAKDOWN_CANDIDATE",
+        "direction": "SHORT",
         "age_scans": 0,
-        "last_event": "RETEST",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420541+00:00",
-        "state_changed": false,
+        "last_event": "NONE",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.617842+00:00",
+        "state_changed": true,
         "confirmation_age_scans": 0
       },
       "1h:RESISTANCE:195": {
@@ -142,8 +142,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420915+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.618014+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -155,8 +155,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420732+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.617886+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -168,8 +168,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420784+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.617915+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -181,8 +181,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420860+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.617966+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -194,8 +194,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.420974+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.618044+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -207,21 +207,21 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.471663+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637552+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
       "15m:RESISTANCE:439": {
         "timeframe": "15m",
         "kind": "RESISTANCE",
-        "level": 86210.97,
+        "level": 86242.395,
         "state": "TEST_RETEST",
         "direction": null,
         "age_scans": 0,
-        "last_event": "RETEST",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.471386+00:00",
+        "last_event": "NONE",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637479+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -246,8 +246,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.471483+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637503+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -272,8 +272,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.519035+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657313+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -298,8 +298,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.519085+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657337+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -363,8 +363,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86113.32,
-        "last_ts": "2026-09-23T08:05:23.782790+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657361+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -415,8 +415,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.471611+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637527+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -428,8 +428,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.518668+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657262+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -467,8 +467,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86113.32,
-        "last_ts": "2026-09-23T08:05:23.782820+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657385+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -553,13 +553,13 @@
       "5m:SUPPORT:821": {
         "timeframe": "5m",
         "kind": "SUPPORT",
-        "level": 86341.64,
+        "level": 86320.755,
         "state": "TEST_RETEST",
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.518879+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657288+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -567,13 +567,13 @@
         "timeframe": "15m",
         "kind": "SUPPORT",
         "level": 86011.0,
-        "state": "TEST_RETEST",
-        "direction": null,
+        "state": "BREAKDOWN_CANDIDATE",
+        "direction": "SHORT",
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.471556+00:00",
-        "state_changed": false,
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637399+00:00",
+        "state_changed": true,
         "confirmation_age_scans": 0
       },
       "15m:SUPPORT:391": {
@@ -597,8 +597,8 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.518933+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657193+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       },
@@ -609,10 +609,10 @@
         "state": "TEST_RETEST",
         "direction": null,
         "age_scans": 0,
-        "last_event": "RETEST",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.471304+00:00",
-        "state_changed": true,
+        "last_event": "NONE",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637453+00:00",
+        "state_changed": false,
         "confirmation_age_scans": 0
       },
       "5m:SUPPORT:732": {
@@ -623,8 +623,21 @@
         "direction": null,
         "age_scans": 0,
         "last_event": "NONE",
-        "last_price": 86170.63,
-        "last_ts": "2026-09-23T08:39:34.518747+00:00",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.657235+00:00",
+        "state_changed": false,
+        "confirmation_age_scans": 0
+      },
+      "15m:SUPPORT:397": {
+        "timeframe": "15m",
+        "kind": "SUPPORT",
+        "level": 85450.0,
+        "state": "NONE",
+        "direction": null,
+        "age_scans": 0,
+        "last_event": "NONE",
+        "last_price": 85765.67,
+        "last_ts": "2026-09-23T08:53:16.637427+00:00",
         "state_changed": false,
         "confirmation_age_scans": 0
       }
@@ -633,18 +646,30 @@
   "shadow_opportunity": {
     "LONG": {
       "status": "FAILED",
-      "age_bars": 18,
-      "last_candle_ts": 1790152500,
-      "last_score": 0.344390124998173,
-      "last_update": "2026-09-23T08:39:34.816797+00:00"
+      "age_bars": 19,
+      "last_candle_ts": 1790153400,
+      "last_score": 0.5632040082304594,
+      "last_update": "2026-09-23T08:53:16.789563+00:00"
     },
     "SHORT": {
-      "status": "FAILED",
-      "age_bars": 18,
-      "last_candle_ts": 1790152500,
-      "last_score": 0.39544805205808836,
-      "last_update": "2026-09-23T08:39:35.116811+00:00"
+      "status": "CONFIRMED",
+      "age_bars": 19,
+      "last_candle_ts": 1790153400,
+      "last_score": 0.570452548499536,
+      "last_update": "2026-09-23T08:53:16.915699+00:00"
     }
   },
-  "shadow_opportunity_episodes": {}
+  "shadow_opportunity_episodes": {
+    "SHORT": {
+      "episode_id": "SHORT_1790153400",
+      "start_candle_ts": 1790153400,
+      "entry_price": 85765.67,
+      "entry_atr": 123.28142857142977,
+      "age_bars": 0,
+      "mfe_atr": 0.0,
+      "mae_atr": 0.0,
+      "initial_status": "CONFIRMED",
+      "initial_evidence_score": 0.570452548499536
+    }
+  }
 }
