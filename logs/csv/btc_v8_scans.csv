@@ -382,3 +382,4 @@ ts,scan_id,event,reason,signal_id,direction,setup,regime,confidence,score,agreem
 2026-09-24T08:10:18.246775+00:00,20260924T081016.724900Z,WAIT,cooldown,,,,,,,,,,,,,,
 2026-09-24T08:29:06.717236+00:00,20260924T082906.717220Z,SCAN_START,,,,,,,,,,,,,,SCAN,
 2026-09-24T08:29:08.554949+00:00,ERROR_20260924T082908.554952Z,SCAN_ERROR,,,,,,,,,,,,,,ERROR,"TypeError(""journal() got multiple values for argument 'event'"")"
+2026-09-24T08:46:23.202744+00:00,20260924T084623.202723Z,SCAN_START,,,,,,,,,,,,,,SCAN,
