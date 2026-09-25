@@ -1,0 +1,44 @@
+name: EMA 8 50 200 Early Telegram Bot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  run-ema-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore XAU cache and bot state
+        uses: actions/cache@v4
+        with:
+          path: |
+            xau_cache
+            ema_bot_state.json
+          key: ema-8-50-200-data-${{ github.run_id }}
+          restore-keys: |
+            ema-8-50-200-data-
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests pandas
+
+      - name: Run EMA bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          XAU_LOOKBACK_HOURS: "270"
+          XAU_INCREMENTAL_HOURS: "3"
+          DUKA_WORKERS: "2"
+          DUKA_RETRIES: "4"
+          DUKA_REQUEST_GAP: "0.40"
+        run: python ema_8_50_200_early_telegram_bot_cache_safe.py
