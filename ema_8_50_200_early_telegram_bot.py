@@ -1,666 +1,207 @@
 #!/usr/bin/env python3
-""" EMA 8 / 50 / 200 Early Detection Telegram Bot ------------------------------------------------ Standalone bot for: - BTC - XAUUSD (Gold) Timeframes: - M5 : Entry - M15 : Upgrade M5 scalp -> swing hold - H1 : Upgrade M5 trade -> longer trend hold Alerts are intentionally limited and state-based: 1) EMA ZONE 2) EMA EARLY CROSS 3) EMA DUAL CROSS / ENTRY 4) M15 CONFIRMATION 5) H1 CONFIRMATION 6) M5 WEAKENING 7) M5 INVALIDATED / EXIT No automatic order execution is performed. The bot only calculates and sends Telegram alerts. Environment variables required: TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID Optional: POLL_SECONDS=60 """
-
-import os
-import time
-import math
-import json
+import os, sys, json, lzma, struct
+from pathlib import Path
+from datetime import datetime, timedelta, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
-from datetime import datetime, timezone
+import pandas as pd
 
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
-STATE_FILE = os.getenv("STATE_FILE", "ema_bot_state.json")
+EMA8, EMA50, EMA200 = 8, 50, 200
+ATR_N = 14
+ZONE_ATR, EARLY_ATR, DUAL_CANDLES = 0.20, 0.30, 3
+SWING_LOOKBACK, ATR_SL_BUFFER = 5, 0.20
+TP1_R, TP2_R = 1.5, 2.0
+COINBASE_PRODUCT = 'BTC-USD'
+DUKA_SYMBOL = 'XAUUSD'
+XAU_LOOKBACK_HOURS = int(os.getenv('XAU_LOOKBACK_HOURS', '270'))
+DUKA_WORKERS = int(os.getenv('DUKA_WORKERS', '16'))
+STATE_FILE = Path(os.getenv('STATE_FILE', 'ema_bot_state.json'))
+S = requests.Session()
+S.headers.update({'User-Agent':'EMA-8-50-200-Telegram-Bot/1.0'})
 
-if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-    raise SystemExit(
-        "Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID environment variable."
-    )
 
-# Yahoo Finance public chart endpoint.
-# BTC and Gold are both obtained from the same simple source.
-SYMBOLS = {
-    "BTC": "BTC-USD",
-    "XAUUSD": "XAUUSD=X",
-}
+def now(): return datetime.now(timezone.utc)
+def log(x): print(f"[{now():%Y-%m-%d %H:%M:%S UTC}] {x}", flush=True)
 
-TIMEFRAMES = {
-    "M5": ("5m", 300),
-    "M15": ("15m", 600),
-    "H1": ("1h", 800),
-}
-
-EMA_FAST = 8
-EMA_MID = 50
-EMA_SLOW = 200
-
-# Simple thresholds; intentionally kept small and understandable.
-ZONE_ATR = 0.20          # all three EMA lines are close to one another
-EARLY_ATR = 0.30         # EMA50 is close to EMA200 after EMA8 crosses
-DUAL_CANDLES = 3         # 8 and 50 can cross 200 within this many candles
-MAX_SAVED_DUAL_EVENTS = 20  # remember recent crossover events to prevent duplicate alerts
-
-ATR_PERIOD = 14
-SWING_LOOKBACK = 5
-ATR_SL_BUFFER = 0.20
-
-# Initial targets agreed in the design:
-# TP1 = 1.5R, TP2 = 2R.
-TP1_R = 1.5
-TP2_R = 2.0
-
-# Higher-timeframe upgrade targets.
-# They do not create another entry; they extend the existing M5 trade.
-EXTEND_ATR = 2.0
-
-HTTP = requests.Session()
-HTTP.headers.update({"User-Agent": "EMA-200-Early-Bot/1.0"})
-
-states = {}
-
+def tg(msg):
+    token=os.environ['TELEGRAM_BOT_TOKEN']; chat=os.environ['TELEGRAM_CHAT_ID']
+    r=S.post(f'https://api.telegram.org/bot{token}/sendMessage',data={'chat_id':chat,'text':msg},timeout=20)
+    r.raise_for_status()
 
 def load_state():
-    global states
-    try:
-        with open(STATE_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        if isinstance(data, dict):
-            states = data
-    except (FileNotFoundError, json.JSONDecodeError, OSError):
-        states = {}
+    try: return json.loads(STATE_FILE.read_text())
+    except Exception: return {'symbols':{}}
 
+def save_state(x): STATE_FILE.write_text(json.dumps(x,indent=2,sort_keys=True))
 
-def save_state():
-    tmp = STATE_FILE + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(states, f, ensure_ascii=False, indent=2)
-    os.replace(tmp, STATE_FILE)
+def sym_state(st,symbol):
+    st.setdefault('symbols',{}); st['symbols'].setdefault(symbol,{
+        'active_trade':None,'last_zone_event':None,'last_early_event':None,
+        'last_entry_event':None,'last_m15_event':None,'last_h1_event':None,
+        'last_weak_event':None,'last_invalid_event':None})
+    return st['symbols'][symbol]
 
+# ---------------- BTC: Coinbase native candles ----------------
+G={'M5':300,'M15':900,'H1':3600}
+def coinbase(tf, needed=430):
+    sec=G[tf]; end=int(now().timestamp()); rows=[]; remaining=needed
+    url=f'https://api.exchange.coinbase.com/products/{COINBASE_PRODUCT}/candles'
+    while remaining>0:
+        count=min(280,remaining); start=end-count*sec
+        p={'granularity':sec,'start':datetime.fromtimestamp(start,timezone.utc).isoformat(),
+           'end':datetime.fromtimestamp(end,timezone.utc).isoformat()}
+        r=S.get(url,params=p,timeout=20); r.raise_for_status(); data=r.json()
+        if not data: break
+        rows += data; oldest=min(int(x[0]) for x in data)
+        if oldest>=end: break
+        end=oldest-sec; remaining-=len(data)
+        if len(data)<count: break
+    if not rows: raise RuntimeError(f'Coinbase returned no {tf} candles')
+    d=pd.DataFrame(rows,columns=['ts','low','high','open','close','volume']).drop_duplicates('ts').sort_values('ts')
+    d['ts']=pd.to_datetime(d.ts,unit='s',utc=True); d=d.set_index('ts')
+    for c in ['open','high','low','close','volume']: d[c]=pd.to_numeric(d[c],errors='coerce')
+    d=d.dropna()
+    if len(d)>1: d=d.iloc[:-1]
+    if len(d)<EMA200+30: raise RuntimeError(f'Not enough Coinbase {tf} candles: {len(d)}')
+    return d
 
-def now_utc():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+# ---------------- XAUUSD: Dukascopy public tick feed -> native candles ----------------
+def duka_url(dt):
+    # Dukascopy datafeed uses zero-based month in this path.
+    return f'https://datafeed.dukascopy.com/datafeed/{DUKA_SYMBOL}/{dt.year:04d}/{dt.month-1:02d}/{dt.day:02d}/{dt.hour:02d}h_ticks.bi5'
 
-
-def send_telegram(message):
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": message,
-    }
-    r = HTTP.post(url, json=payload, timeout=15)
+def duka_hour(dt):
+    r=S.get(duka_url(dt),timeout=20)
+    if r.status_code==404: return []
     r.raise_for_status()
-
-
-def fetch_candles(symbol, interval, period_seconds):
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
-    params = {
-        "period1": int(time.time()) - period_seconds * 100,
-        "period2": int(time.time()),
-        "interval": interval,
-        "events": "history",
-        "includeAdjustedClose": "true",
-    }
-    r = HTTP.get(url, params=params, timeout=15)
-    r.raise_for_status()
-    data = r.json()
-
-    result = data["chart"]["result"]
-    if not result:
-        raise ValueError(f"No data returned for {symbol} {interval}")
-
-    result = result[0]
-    timestamps = result.get("timestamp", [])
-    q = result["indicators"]["quote"][0]
-
-    rows = []
-    for i, ts in enumerate(timestamps):
-        try:
-            o = float(q["open"][i])
-            h = float(q["high"][i])
-            l = float(q["low"][i])
-            c = float(q["close"][i])
-        except (TypeError, ValueError, IndexError):
-            continue
-
-        if any(math.isnan(x) for x in (o, h, l, c)):
-            continue
-
-        rows.append({
-            "ts": int(ts),
-            "open": o,
-            "high": h,
-            "low": l,
-            "close": c,
-        })
-
-    if len(rows) < EMA_SLOW + ATR_PERIOD + 10:
-        raise ValueError(f"Not enough candles for {symbol} {interval}")
-
-    return rows
-
-
-def ema(values, period):
-    if len(values) < period:
-        return [None] * len(values)
-
-    out = [None] * len(values)
-    seed = sum(values[:period]) / period
-    out[period - 1] = seed
-    alpha = 2.0 / (period + 1.0)
-
-    prev = seed
-    for i in range(period, len(values)):
-        prev = (values[i] - prev) * alpha + prev
-        out[i] = prev
-
+    raw=lzma.decompress(r.content)
+    if len(raw)%20: raise RuntimeError(f'bad bi5 size {len(raw)}')
+    out=[]
+    for ms,ask_i,bid_i,av,bv in struct.iter_unpack('>Iiiii',raw):
+        ask=ask_i/1000.0; bid=bid_i/1000.0
+        if ask>0 and bid>0: out.append((dt+timedelta(milliseconds=ms),(ask+bid)/2.0))
     return out
 
-
-def atr(candles, period=ATR_PERIOD):
-    if len(candles) < period + 1:
-        return [None] * len(candles)
-
-    tr = [None] * len(candles)
-    tr[0] = candles[0]["high"] - candles[0]["low"]
-
-    for i in range(1, len(candles)):
-        h = candles[i]["high"]
-        l = candles[i]["low"]
-        pc = candles[i - 1]["close"]
-        tr[i] = max(h - l, abs(h - pc), abs(l - pc))
-
-    out = [None] * len(candles)
-    seed = sum(tr[1:period + 1]) / period
-    out[period] = seed
-    alpha = 1.0 / period
-    prev = seed
-
-    for i in range(period + 1, len(candles)):
-        prev = ((period - 1) * prev + tr[i]) / period
-        out[i] = prev
-
+def xau_frames():
+    end=now().replace(minute=0,second=0,microsecond=0)
+    start=end-timedelta(hours=XAU_LOOKBACK_HOURS)
+    hours=[start+timedelta(hours=i) for i in range(XAU_LOOKBACK_HOURS)]
+    ticks=[]; errors=0
+    with ThreadPoolExecutor(max_workers=DUKA_WORKERS) as ex:
+        fs={ex.submit(duka_hour,h):h for h in hours}
+        for f in as_completed(fs):
+            try: ticks += f.result()
+            except Exception as e: errors += 1; log(f'XAU hour {fs[f]:%Y-%m-%d %H}: {e}')
+    if errors: log(f'XAUUSD: {errors} hour requests failed')
+    if not ticks: raise RuntimeError('Dukascopy returned no XAUUSD ticks')
+    d=pd.DataFrame(ticks,columns=['ts','price']); d.ts=pd.to_datetime(d.ts,utc=True)
+    d=d.drop_duplicates('ts').sort_values('ts').set_index('ts'); d.price=pd.to_numeric(d.price,errors='coerce'); d=d.dropna()
+    med=float(d.price.median())
+    if not 100<med<10000: raise RuntimeError(f'XAUUSD price sanity check failed: {med}')
+    out={}
+    for tf,rule in [('M5','5min'),('M15','15min'),('H1','1h')]:
+        o=d.price.resample(rule,label='left',closed='left').ohlc(); o['volume']=d.price.resample(rule,label='left',closed='left').count(); o=o.dropna()
+        if len(o)>1: o=o.iloc[:-1]
+        if len(o)<EMA200+30: raise RuntimeError(f'Not enough XAUUSD {tf} candles: {len(o)}')
+        out[tf]=o
     return out
 
-
-def prepare(candles):
-    closes = [x["close"] for x in candles]
-    e8 = ema(closes, EMA_FAST)
-    e50 = ema(closes, EMA_MID)
-    e200 = ema(closes, EMA_SLOW)
-    a = atr(candles)
-
-    for i, row in enumerate(candles):
-        row["ema8"] = e8[i]
-        row["ema50"] = e50[i]
-        row["ema200"] = e200[i]
-        row["atr"] = a[i]
-
-    return candles
-
-
-def valid(row):
-    return all(row.get(k) is not None for k in ("ema8", "ema50", "ema200", "atr")) and row["atr"] > 0
-
-
-def crossed_up(prev, cur, fast_key):
-    return prev[fast_key] <= prev["ema200"] and cur[fast_key] > cur["ema200"]
-
-
-def crossed_down(prev, cur, fast_key):
-    return prev[fast_key] >= prev["ema200"] and cur[fast_key] < cur["ema200"]
-
-
-def direction_alignment(row):
-    if row["ema8"] > row["ema50"] > row["ema200"]:
-        return "BULLISH"
-    if row["ema8"] < row["ema50"] < row["ema200"]:
-        return "BEARISH"
-    return "MIXED"
-
-
-def close_to_200(row, key, multiplier):
-    return abs(row[key] - row["ema200"]) <= row["atr"] * multiplier
-
-
-def compressed(row):
-    if not valid(row):
-        return False
-    spread = max(row["ema8"], row["ema50"], row["ema200"]) - min(
-        row["ema8"], row["ema50"], row["ema200"]
-    )
-    return spread <= row["atr"] * ZONE_ATR
-
-
-def recent_dual_cross(candles, direction):
-    """ True when EMA8 and EMA50 have crossed EMA200 in the same direction within DUAL_CANDLES candles. """
-    n = len(candles)
-    if n < DUAL_CANDLES + 2:
-        return False
-
-    recent = candles[max(1, n - DUAL_CANDLES - 1):]
-
-    up8 = any(crossed_up(recent[i - 1], recent[i], "ema8")
-              for i in range(1, len(recent)))
-    up50 = any(crossed_up(recent[i - 1], recent[i], "ema50")
-               for i in range(1, len(recent)))
-
-    dn8 = any(crossed_down(recent[i - 1], recent[i], "ema8")
-              for i in range(1, len(recent)))
-    dn50 = any(crossed_down(recent[i - 1], recent[i], "ema50")
-               for i in range(1, len(recent)))
-
-    if direction == "BULLISH":
-        return up8 and up50
-    if direction == "BEARISH":
-        return dn8 and dn50
-    return False
-
-
-def find_recent_crosses(candles, key, direction):
-    """ Return recent completed-candle cross events as (age, timestamp). age=0 means the cross happened on the latest completed candle. """
-    events = []
-    max_age = min(DUAL_CANDLES, len(candles) - 2)
-
-    for age in range(0, max_age + 1):
-        i = len(candles) - 1 - age
-        if i <= 0:
-            continue
-
-        prev = candles[i - 1]
-        cur = candles[i]
-        crossed = (
-            direction == "BULLISH" and crossed_up(prev, cur, key)
-        ) or (
-            direction == "BEARISH" and crossed_down(prev, cur, key)
-        )
-
-        if crossed:
-            events.append((age, cur["ts"]))
-
-    return events
-
-
-def dual_cross_event(candles, direction):
-    """ Find one FRESH dual-cross event and return a stable event id. The event is defined by the actual completed candle timestamps on which EMA8 and EMA50 crossed EMA200. This is deliberately NOT keyed to the current candle timestamp, so the same crossover cannot generate a new ENTRY message on every 5-minute scan. A crossover is accepted only while the current completed candle still has the expected directional EMA structure. This prevents an old cross from becoming a late/stale entry after the market has already reversed. """
-    if len(candles) < EMA_SLOW + DUAL_CANDLES + 2:
-        return None
-
-    row = candles[-1]
-    if not valid(row):
-        return None
-
-    alignment = direction_alignment(row)
-    if alignment != direction:
-        return None
-
-    crosses8 = find_recent_crosses(candles, "ema8", direction)
-    crosses50 = find_recent_crosses(candles, "ema50", direction)
-
-    if not crosses8 or not crosses50:
-        return None
-
-    # Use the newest pair that occurred within DUAL_CANDLES of each other.
-    candidates = []
-    for age8, ts8 in crosses8:
-        for age50, ts50 in crosses50:
-            if abs(age8 - age50) <= DUAL_CANDLES:
-                candidates.append((max(age8, age50), ts8, ts50))
-
-    if not candidates:
-        return None
-
-    age, ts8, ts50 = min(candidates, key=lambda x: (x[0], max(x[1], x[2])))
-    event_id = f"{direction}:{min(ts8, ts50)}:{max(ts8, ts50)}"
-
-    return {
-        "id": event_id,
-        "age": age,
-        "ts8": ts8,
-        "ts50": ts50,
-    }
-
-
-def remember_dual_event(state, event_id):
-    events = state.setdefault("seen_dual_events", [])
-    if event_id not in events:
-        events.append(event_id)
-    if len(events) > MAX_SAVED_DUAL_EVENTS:
-        del events[:-MAX_SAVED_DUAL_EVENTS]
-
-
-def dual_event_already_seen(state, event_id):
-    return event_id in state.setdefault("seen_dual_events", [])
-
-def structure_failure(candles, direction):
-    row = candles[-1]
-    if not valid(row):
-        return False
-
-    if direction == "BULLISH":
-        return row["ema8"] < row["ema50"] or row["close"] < row["ema200"]
-
-    if direction == "BEARISH":
-        return row["ema8"] > row["ema50"] or row["close"] > row["ema200"]
-
-    return False
-
-
-def swing_level(candles, direction):
-    recent = candles[-SWING_LOOKBACK - 1:-1]
-    if not recent:
-        recent = candles[-SWING_LOOKBACK:]
-
-    if direction == "BULLISH":
-        return min(x["low"] for x in recent)
-    return max(x["high"] for x in recent)
-
-
-def calculate_trade(candles, direction):
-    row = candles[-1]
-    entry = row["close"]
-    a = row["atr"]
-    swing = swing_level(candles, direction)
-
-    if direction == "BULLISH":
-        sl = min(swing, entry - a) - (a * ATR_SL_BUFFER)
-        risk = entry - sl
-        tp1 = entry + risk * TP1_R
-        tp2 = entry + risk * TP2_R
-    else:
-        sl = max(swing, entry + a) + (a * ATR_SL_BUFFER)
-        risk = sl - entry
-        tp1 = entry - risk * TP1_R
-        tp2 = entry - risk * TP2_R
-
-    return {
-        "entry": entry,
-        "sl": sl,
-        "risk": risk,
-        "tp1": tp1,
-        "tp2": tp2,
-    }
-
-
-def extended_target(candles, trade_direction):
-    row = candles[-1]
-    if not valid(row):
-        return None
-
-    if trade_direction == "BULLISH":
-        return row["close"] + row["atr"] * EXTEND_ATR
-    return row["close"] - row["atr"] * EXTEND_ATR
-
-
-def fmt(x):
-    if x >= 1000:
-        return f"{x:,.2f}"
-    return f"{x:.2f}"
-
-
-def base_message(symbol, title, direction, row, extra=""):
-    return (
-        f"{title}\n"
-        f"{symbol} | {direction}\n"
-        f"EMA8: {fmt(row['ema8'])}\n"
-        f"EMA50: {fmt(row['ema50'])}\n"
-        f"EMA200: {fmt(row['ema200'])}\n"
-        f"Price: {fmt(row['close'])}\n"
-        f"{extra}\n"
-        f"{now_utc()}"
-    )
-
-
-def scan_symbol(symbol_name):
-    s = states.setdefault(symbol_name, {
-        "m5_state": "NORMAL",
-        "trade": None,
-        "last_zone_key": None,
-        "last_early_key": None,
-        "last_dual_key": None,
-        "seen_dual_events": [],
-        "m15_confirmed": False,
-        "h1_confirmed": False,
-        "last_weak_key": None,
-        "last_invalid_key": None,
-    })
-
-    # Backward-compatible state migration for older state files.
-    if not isinstance(s.get("seen_dual_events"), list):
-        s["seen_dual_events"] = []
-
-    data = {}
-    for tf, (interval, seconds) in TIMEFRAMES.items():
-        candles = fetch_candles(SYMBOLS[symbol_name], interval, seconds)
-        data[tf] = prepare(candles)
-
-    m5 = data["M5"]
-    m15 = data["M15"]
-    h1 = data["H1"]
-
-    # Use completed candles only. The latest returned candle can still be forming.
-    m5 = m5[:-1]
-    m15 = m15[:-1]
-    h1 = h1[:-1]
-
-    if len(m5) < EMA_SLOW + 5:
+# ---------------- indicators / signals ----------------
+def indicators(d):
+    x=d.copy(); x['ema8']=x.close.ewm(span=EMA8,adjust=False).mean(); x['ema50']=x.close.ewm(span=EMA50,adjust=False).mean(); x['ema200']=x.close.ewm(span=EMA200,adjust=False).mean()
+    pc=x.close.shift(1); tr=pd.concat([x.high-x.low,(x.high-pc).abs(),(x.low-pc).abs()],axis=1).max(axis=1); x['atr']=tr.rolling(ATR_N).mean()
+    return x.dropna()
+
+def cu(ap,an,bp,bn): return ap<=bp and an>bn
+def cd(ap,an,bp,bn): return ap>=bp and an<bn
+
+def dual(d,direction):
+    a=[]; b=[]
+    for i in range(1,len(d)):
+        p=d.iloc[i-1]; c=d.iloc[i]
+        if direction=='LONG':
+            if cu(p.ema8,c.ema8,p.ema200,c.ema200): a.append(i)
+            if cu(p.ema50,c.ema50,p.ema200,c.ema200): b.append(i)
+        else:
+            if cd(p.ema8,c.ema8,p.ema200,c.ema200): a.append(i)
+            if cd(p.ema50,c.ema50,p.ema200,c.ema200): b.append(i)
+    pairs=[(max(i,j),i,j) for i in a for j in b if abs(i-j)<=DUAL_CANDLES]
+    if not pairs: return None
+    ei,i,j=max(pairs); return {'event_ts':d.index[ei].isoformat(),'i':ei}
+
+def zone(d):
+    c=d.iloc[-1]; return c if max(c.ema8,c.ema50,c.ema200)-min(c.ema8,c.ema50,c.ema200)<=ZONE_ATR*c.atr else None
+
+def early(d,direction):
+    p,c=d.iloc[-2],d.iloc[-1]
+    if direction=='LONG': ok=cu(p.ema8,c.ema8,p.ema200,c.ema200) and abs(c.ema50-c.ema200)<=EARLY_ATR*c.atr and c.ema50>p.ema50 and c.ema50>=c.ema200
+    else: ok=cd(p.ema8,c.ema8,p.ema200,c.ema200) and abs(c.ema50-c.ema200)<=EARLY_ATR*c.atr and c.ema50<p.ema50 and c.ema50<=c.ema200
+    return c if ok else None
+
+def trade(d,direction):
+    c=d.iloc[-1]; look=d.iloc[-(SWING_LOOKBACK+1):-1]; atr=float(c.atr); entry=float(c.close)
+    if direction=='LONG': sl=float(look.low.min())-ATR_SL_BUFFER*atr; risk=entry-sl; tp1=entry+TP1_R*risk; tp2=entry+TP2_R*risk
+    else: sl=float(look.high.max())+ATR_SL_BUFFER*atr; risk=sl-entry; tp1=entry-TP1_R*risk; tp2=entry-TP2_R*risk
+    if risk<=0: return None
+    return {'direction':direction,'entry':entry,'sl':sl,'tp1':tp1,'tp2':tp2,'entry_ts':c.name.isoformat(),'m15_confirmed':False,'h1_confirmed':False}
+
+def fp(symbol,x): return f'{x:.2f}'
+
+def process(symbol,frames,st):
+    s=sym_state(st,symbol); m5=indicators(frames['M5']); m15=indicators(frames['M15']); h1=indicators(frames['H1'])
+    t=s['active_trade']
+    if t:
+        direction=t['direction']; c=m5.iloc[-1]
+        e=dual(m15,direction)
+        if e and e['event_ts']!=s['last_m15_event']:
+            s['last_m15_event']=e['event_ts']; t['m15_confirmed']=True
+            tg(f'🟢 M15 CONFIRMATION — EXTEND TRADE\n\n{symbol} {direction}\nM15 EMA 8 + EMA 50 confirmed same direction through EMA 200.\nExisting M5 trade: HOLD / EXTEND.')
+        e=dual(h1,direction)
+        if e and e['event_ts']!=s['last_h1_event']:
+            s['last_h1_event']=e['event_ts']; t['h1_confirmed']=True
+            tg(f'🔵 H1 CONFIRMATION — LONG HOLD MODE\n\n{symbol} {direction}\nH1 EMA 8 + EMA 50 confirmed same direction through EMA 200.\nExisting M5 trade: LONG HOLD MODE.')
+        if direction=='LONG': weak=c.ema8<c.ema50 or c.close<c.ema200; invalid=c.ema8<c.ema50 and c.ema50<c.ema200
+        else: weak=c.ema8>c.ema50 or c.close>c.ema200; invalid=c.ema8>c.ema50 and c.ema50>c.ema200
+        if invalid:
+            ev=c.name.isoformat()
+            if ev!=s['last_invalid_event']:
+                s['last_invalid_event']=ev; tg(f'🔴 M5 TRADE INVALIDATED — EXIT\n\n{symbol} {direction}\nM5 EMA structure flipped against the active trade.')
+            s['active_trade']=None; return
+        if weak:
+            ev=c.name.isoformat()
+            if ev!=s['last_weak_event']:
+                s['last_weak_event']=ev; tg(f'⚠️ M5 TRADE WEAKENING\n\n{symbol} {direction}\nM5 structure is weakening. Monitor/protect the active trade.')
         return
-
-    row = m5[-1]
-    prev = m5[-2]
-
-    # ---------------- M5 ZONE ----------------
-    if compressed(row):
-        key = row["ts"]
-        if s["m5_state"] == "NORMAL" and s["last_zone_key"] != key:
-            send_telegram(
-                base_message(
-                    symbol_name,
-                    "ðŸŸ¡ M5 EMA ZONE",
-                    "WATCH",
-                    row,
-                    "EMA 8 / 50 / 200 are compressed near each other.\n"
-                    "EMA-200 decision zone detected."
-                )
-            )
-            s["m5_state"] = "ZONE"
-            s["last_zone_key"] = key
-
-    # ---------------- M5 EARLY CROSS ----------------
-    bull_early = (
-        crossed_up(prev, row, "ema8")
-        and close_to_200(row, "ema50", EARLY_ATR)
-        and row["ema50"] > prev["ema50"]
-    )
-    bear_early = (
-        crossed_down(prev, row, "ema8")
-        and close_to_200(row, "ema50", EARLY_ATR)
-        and row["ema50"] < prev["ema50"]
-    )
-
-    if bull_early or bear_early:
-        direction = "BULLISH" if bull_early else "BEARISH"
-        key = (row["ts"], direction)
-
-        if s["last_early_key"] != key:
-            send_telegram(
-                base_message(
-                    symbol_name,
-                    "ðŸŸ  M5 EMA EARLY CROSS",
-                    direction,
-                    row,
-                    "EMA8 has crossed EMA200.\n"
-                    "EMA50 is close to EMA200 and moving toward it.\n"
-                    "Potential dual-cross developing."
-                )
-            )
-            s["last_early_key"] = key
-            s["m5_state"] = "EARLY"
-
-    # ---------------- M5 DUAL CROSS / ENTRY ----------------
-    #
-    # Important anti-spam rule:
-    # - A dual cross gets a stable event id based on the actual crossover
-    # candles, NOT the current scan time.
-    # - The same event can therefore be seen on multiple 5-minute scans but
-    # can generate only one ENTRY alert.
-    # - If an M5 trade is already active, another scan of the same event (or
-    # another nearby duplicate event) cannot create a second entry.
-    # - A fresh opposite trade is considered only after the existing trade has
-    # been invalidated/cleared by the normal management logic.
-    for direction in ("BULLISH", "BEARISH"):
-        event = dual_cross_event(m5, direction)
-        if not event:
-            continue
-
-        event_id = event["id"]
-        already_seen = dual_event_already_seen(s, event_id)
-
-        # Always remember the event, even if a trade is already active. This
-        # prevents a later scan/restart from turning the same event into a
-        # second entry.
-        if not already_seen:
-            remember_dual_event(s, event_id)
-
-        # Existing trade owns the alert stream until it is invalidated.
-        if s.get("trade"):
-            continue
-
-        if already_seen:
-            continue
-
-        trade = calculate_trade(m5, direction)
-
-        send_telegram(
-            f"ðŸš¨ M5 EMA DUAL CROSS â€” ENTRY\n"
-            f"{symbol_name} | {direction}\n"
-            f"EMA8 + EMA50 crossed EMA200 within {DUAL_CANDLES} candles.\n"
-            f"Fresh crossover event; current M5 structure still confirms it.\n\n"
-            f"Entry: {fmt(trade['entry'])}\n"
-            f"SL: {fmt(trade['sl'])}\n"
-            f"TP1: {fmt(trade['tp1'])} (1.5R)\n"
-            f"TP2: {fmt(trade['tp2'])} (2R)\n\n"
-            f"Initial mode: M5 SCALP\n"
-            f"Watch M15 confirmation to extend the trade.\n"
-            f"{now_utc()}"
-        )
-
-        s["trade"] = {
-            "direction": direction,
-            "entry": trade["entry"],
-            "sl": trade["sl"],
-            "tp1": trade["tp1"],
-            "tp2": trade["tp2"],
-            "m15_confirmed": False,
-            "h1_confirmed": False,
-            "opened_ts": row["ts"],
-            "dual_event_id": event_id,
-        }
-        s["m15_confirmed"] = False
-        s["h1_confirmed"] = False
-        s["last_dual_key"] = event_id
-        s["m5_state"] = "DUAL"
-
-    # ---------------- Existing trade management ----------------
-    trade = s.get("trade")
-    if not trade:
+    z=zone(m5)
+    if z is not None and z.name.isoformat()!=s['last_zone_event']:
+        s['last_zone_event']=z.name.isoformat(); tg(f'🟡 M5 EMA ZONE\n\n{symbol}\nEMA 8 / EMA 50 / EMA 200 are compressed near a decision zone.')
+    for direction in ('LONG','SHORT'):
+        e=early(m5,direction)
+        if e is not None and e.name.isoformat()!=s['last_early_event']:
+            s['last_early_event']=e.name.isoformat(); tg(f'🟠 M5 EMA EARLY CROSS\n\n{symbol} {direction}\nEMA 8 crossed EMA 200; EMA 50 is close and moving toward confirmation.')
+        ev=dual(m5,direction)
+        if not ev or ev['event_ts']==s['last_entry_event']: continue
+        age=now()-pd.Timestamp(ev['event_ts']).to_pydatetime()
+        if age.total_seconds()<0 or age>timedelta(minutes=8): continue
+        t=trade(m5,direction)
+        if not t: continue
+        s['last_entry_event']=ev['event_ts']; s['active_trade']=t
+        tg(f"🚨 M5 EMA DUAL CROSS — ENTRY\n\n{'🟢' if direction=='LONG' else '🔴'} {symbol} {direction}\nEntry: {fp(symbol,t['entry'])}\nSL: {fp(symbol,t['sl'])}\nTP1 (1.5R): {fp(symbol,t['tp1'])}\nTP2 (2R): {fp(symbol,t['tp2'])}\n\nEMA 8 + EMA 50 crossed EMA 200 within {DUAL_CANDLES} M5 candles.")
         return
-
-    direction = trade["direction"]
-
-    # M15 confirmation: same directional dual-cross.
-    if not trade["m15_confirmed"] and dual_cross_event(m15, direction):
-        target = extended_target(m15, direction)
-
-        send_telegram(
-            f"ðŸŸ¢ M15 CONFIRMATION â€” EXTEND TRADE\n"
-            f"{symbol_name} | Existing M5 {direction} trade\n"
-            f"M15 EMA8 + EMA50 have crossed EMA200 in the same direction.\n"
-            f"Do not treat this as a new entry.\n"
-            f"Extend/hold the existing M5 position.\n"
-            f"Extended target reference: {fmt(target)}\n"
-            f"M5 SL remains: {fmt(trade['sl'])}\n"
-            f"{now_utc()}"
-        )
-
-        trade["m15_confirmed"] = True
-        s["m15_confirmed"] = True
-
-    # H1 confirmation: same directional dual-cross.
-    if not trade["h1_confirmed"] and dual_cross_event(h1, direction):
-        target = extended_target(h1, direction)
-
-        send_telegram(
-            f"ðŸ”µ H1 CONFIRMATION â€” LONG HOLD MODE\n"
-            f"{symbol_name} | Existing M5 {direction} trade\n"
-            f"H1 EMA8 + EMA50 have crossed EMA200 in the same direction.\n"
-            f"Do not treat this as a new entry.\n"
-            f"Longer-trend confirmation detected.\n"
-            f"Extended target reference: {fmt(target)}\n"
-            f"M5 SL remains: {fmt(trade['sl'])}\n"
-            f"{now_utc()}"
-        )
-
-        trade["h1_confirmed"] = True
-        s["h1_confirmed"] = True
-
-    # M5 weakening / invalidation.
-    if structure_failure(m5, direction):
-        key = (row["ts"], direction)
-
-        if s["last_weak_key"] != key:
-            send_telegram(
-                f"âš ï¸ M5 TRADE WEAKENING\n"
-                f"{symbol_name} | Existing {direction} trade\n"
-                f"M5 EMA structure is weakening.\n"
-                f"Higher-timeframe confirmation: "
-                f"{'M15 YES' if trade['m15_confirmed'] else 'M15 NO'} / "
-                f"{'H1 YES' if trade['h1_confirmed'] else 'H1 NO'}\n"
-                f"Protect the existing position and watch for invalidation.\n"
-                f"{now_utc()}"
-            )
-            s["last_weak_key"] = key
-
-        # Clear the trade only after a clear opposite structure.
-        opposite = (
-            direction == "BULLISH"
-            and row["ema8"] < row["ema50"] < row["ema200"]
-        ) or (
-            direction == "BEARISH"
-            and row["ema8"] > row["ema50"] > row["ema200"]
-        )
-
-        if opposite:
-            if s["last_invalid_key"] != key:
-                send_telegram(
-                    f"ðŸ”´ M5 TRADE INVALIDATED â€” EXIT\n"
-                    f"{symbol_name} | Existing {direction} trade\n"
-                    f"M5 has established the opposite EMA structure.\n"
-                    f"M15 confirmation: {'YES' if trade['m15_confirmed'] else 'NO'}\n"
-                    f"H1 confirmation: {'YES' if trade['h1_confirmed'] else 'NO'}\n"
-                    f"Exit/protect the remaining position.\n"
-                    f"{now_utc()}"
-                )
-                s["last_invalid_key"] = key
-
-            s["trade"] = None
-            s["m15_confirmed"] = False
-            s["h1_confirmed"] = False
-            s["m5_state"] = "NORMAL"
-
 
 def main():
-    # GitHub Actions starts this script every 5 minutes.
-    # The state file keeps alert/trade state between runs.
-    load_state()
+    if not os.getenv('TELEGRAM_BOT_TOKEN') or not os.getenv('TELEGRAM_CHAT_ID'): raise RuntimeError('Telegram secrets are required')
+    st=load_state(); btc={}
+    for tf in G:
+        try: btc[tf]=coinbase(tf)
+        except Exception as e: log(f'BTC {tf}: {e}'); btc={}; break
+    if btc:
+        try: process('BTC',btc,st)
+        except Exception as e: log(f'BTC processing error: {e}')
+    try: process('XAUUSD',xau_frames(),st)
+    except Exception as e: log(f'XAUUSD: {e}')
+    save_state(st); log('Run complete.')
 
-    for symbol_name in SYMBOLS:
-        try:
-            scan_symbol(symbol_name)
-        except Exception as e:
-            print(f"[{now_utc()}] {symbol_name}: {e}")
-
-    save_state()
-
-
-if __name__ == "__main__":
-    main()
+if __name__=='__main__':
+    try: main()
+    except Exception as e: log(f'FATAL: {e}'); sys.exit(1)
