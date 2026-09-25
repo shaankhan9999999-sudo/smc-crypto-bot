@@ -1,0 +1,30 @@
+name: EMA 8 50 200 Early Telegram Bot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  run-ema-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      POLL_SECONDS: "60"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: | python -m pip install --upgrade pip pip install requests 
+      - name: Run EMA bot
+        run: | python ema_8_50_200_early_telegram_bot.py
